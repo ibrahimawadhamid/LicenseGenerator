@@ -1,0 +1,2 @@
+# LicenseGenerator
+License Generator
