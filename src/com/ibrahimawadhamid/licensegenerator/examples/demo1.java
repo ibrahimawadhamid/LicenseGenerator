@@ -4,15 +4,12 @@ import com.ibrahimawadhamid.licensegenerator.handler.KeyMaker;
 import com.ibrahimawadhamid.licensegenerator.license.LicenseManager;
 
 public class demo1 {
-    public demo1() {
-    }
 
     public static void main(String[] args) {
         LicenseManager manager = new LicenseManager();
         String licenseFile = "license.dat";
-        boolean validLicense = false;
         manager.makeLicense(licenseFile, 10);
-        validLicense = manager.isLicenseValid(licenseFile);
+        boolean validLicense = manager.isLicenseValid(licenseFile);
         if (validLicense) {
             System.out.println("Valid License File");
         } else {

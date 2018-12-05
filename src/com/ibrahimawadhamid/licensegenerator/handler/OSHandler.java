@@ -1,9 +1,6 @@
 package com.ibrahimawadhamid.licensegenerator.handler;
 
-public class OSHandler {
-    public OSHandler() {
-    }
-
+class OSHandler {
     public static boolean isWindows() {
         String os = System.getProperty("os.name").toLowerCase();
         return os.contains("win");

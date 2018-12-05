@@ -1,22 +1,18 @@
 package com.ibrahimawadhamid.licensegenerator.handler;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class IDGenerator {
-    public IDGenerator() {
-    }
 
     public static String getMotherboardSN() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         try {
             File file = File.createTempFile("temp_license", ".vbs");
@@ -27,22 +23,27 @@ public class IDGenerator {
             fw.close();
             Process p = Runtime.getRuntime().exec("cscript //NoLogo " + file.getPath());
 
-            BufferedReader input;
-            String line;
-            for(input = new BufferedReader(new InputStreamReader(p.getInputStream())); (line = input.readLine()) != null; result = result + line) {
-                ;
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+
+                String sCurrentLine;
+
+                while ((sCurrentLine = br.readLine()) != null) {
+                    result.append(sCurrentLine);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            input.close();
         } catch (Exception var7) {
-            ;
+            Logger.getLogger(CryptographyHandler.class.getName()).log(Level.SEVERE, null, var7);
         }
 
-        return result.trim();
+        return result.toString().trim();
     }
 
     public static String getSerialNumber(String drive) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         try {
             File file = File.createTempFile("realhowto", ".vbs");
@@ -53,35 +54,39 @@ public class IDGenerator {
             fw.close();
             Process p = Runtime.getRuntime().exec("cscript //NoLogo " + file.getPath());
 
-            BufferedReader input;
-            String line;
-            for(input = new BufferedReader(new InputStreamReader(p.getInputStream())); (line = input.readLine()) != null; result = result + line) {
-                ;
+
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+
+                String sCurrentLine;
+
+                while ((sCurrentLine = br.readLine()) != null) {
+                    result.append(sCurrentLine);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            input.close();
         } catch (Exception var8) {
-            ;
+            Logger.getLogger(CryptographyHandler.class.getName()).log(Level.SEVERE, null, var8);
+
         }
 
-        return result.trim();
+        return result.toString().trim();
     }
 
     public static String get_mac_address_windows() throws SocketException {
         String mac_address = "";
 
         StringBuffer lStringBuffer;
-        for(Enumeration interfaces = NetworkInterface.getNetworkInterfaces(); interfaces.hasMoreElements(); mac_address = mac_address + lStringBuffer) {
-            NetworkInterface nif = (NetworkInterface)interfaces.nextElement();
+        for (Enumeration interfaces = NetworkInterface.getNetworkInterfaces(); interfaces.hasMoreElements(); mac_address = mac_address + lStringBuffer) {
+            NetworkInterface nif = (NetworkInterface) interfaces.nextElement();
             byte[] lBytes = nif.getHardwareAddress();
             lStringBuffer = new StringBuffer();
             if (lBytes != null) {
-                byte[] arr$ = lBytes;
-                int len$ = lBytes.length;
 
-                for(int i$ = 0; i$ < len$; ++i$) {
-                    byte b = arr$[i$];
-                    lStringBuffer.append(String.format("%1$02X ", new Byte(b)));
+                for (byte b : lBytes) {
+                    lStringBuffer.append(String.format("%1$02X ", b));
                 }
             }
         }
@@ -89,22 +94,22 @@ public class IDGenerator {
         return mac_address;
     }
 
-    public static String get_mac_address_unix() throws SocketException, IOException {
-        String mac_address = "";
+    public static String get_mac_address_unix() throws IOException {
+        StringBuilder mac_address = new StringBuilder();
         String command = "ipconfig /all";
         Process p = Runtime.getRuntime().exec(command);
         BufferedReader inn = new BufferedReader(new InputStreamReader(p.getInputStream()));
         Pattern pattern = Pattern.compile(".*Physical Addres.*: (.*)");
 
-        while(true) {
+        while (true) {
             String line = inn.readLine();
             if (line == null) {
-                return mac_address;
+                return mac_address.toString();
             }
 
             Matcher mm = pattern.matcher(line);
             if (mm.matches()) {
-                mac_address = mac_address + mm.group(1);
+                mac_address.append(mm.group(1));
             }
         }
     }

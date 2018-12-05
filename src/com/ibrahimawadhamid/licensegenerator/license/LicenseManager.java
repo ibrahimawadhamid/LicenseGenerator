@@ -5,13 +5,8 @@ import com.ibrahimawadhamid.licensegenerator.handler.CryptographyHandler;
 import com.ibrahimawadhamid.licensegenerator.handler.FileHandler;
 import com.ibrahimawadhamid.licensegenerator.handler.IDGenerator;
 import com.ibrahimawadhamid.licensegenerator.handler.KeyMaker;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
+
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,7 +34,7 @@ public class LicenseManager {
                 License license = this.openLicenseFile(pathFilenameExtension);
                 String motherboard_id = IDGenerator.getMotherboardSN();
                 String harddisk_id = IDGenerator.getSerialNumber("C");
-                if (motherboard_id.matches(license.getMotherboardID()) && harddisk_id.matches(license.getHardDiskID())) {
+                if (motherboard_id.matches(license != null ? license.getMotherboardID() : null) && harddisk_id.matches(license.getHardDiskID())) {
                     this.closeLicenseFile(pathFilenameExtension);
                     return true;
                 } else {
@@ -48,14 +43,14 @@ public class LicenseManager {
                 }
             }
         } catch (Exception var5) {
-            Logger.getLogger(License.class.getName()).log(Level.SEVERE, (String)null, var5);
+            Logger.getLogger(License.class.getName()).log(Level.SEVERE, null, var5);
             return false;
         }
     }
 
     public boolean makeLicenseFree(String pathFilenameExtension, String pcKey) {
         License license = this.openLicenseFile(pathFilenameExtension);
-        if (KeyMaker.getKey(license.getPcID()).matches(pcKey)) {
+        if (KeyMaker.getKey(license != null ? license.getPcID() : null).matches(pcKey)) {
             license.setNumberOfRuns(-1);
             this.saveLicenseFile(license, pathFilenameExtension);
             this.closeLicenseFile(pathFilenameExtension);
@@ -68,6 +63,7 @@ public class LicenseManager {
 
     public void setNumberOfRuns(String pathFilenameExtension, int newNumberOfRuns) {
         License license = this.openLicenseFile(pathFilenameExtension);
+        assert license != null;
         license.setNumberOfRuns(newNumberOfRuns);
         this.saveLicenseFile(license, pathFilenameExtension);
         this.closeLicenseFile(pathFilenameExtension);
@@ -75,14 +71,14 @@ public class LicenseManager {
 
     public int getNumberOfRuns(String pathFilenameExtension) {
         License license = this.openLicenseFile(pathFilenameExtension);
-        int numberOfRuns = license.getNumberOfRuns();
+        int numberOfRuns = license != null ? license.getNumberOfRuns() : 0;
         this.closeLicenseFile(pathFilenameExtension);
         return numberOfRuns;
     }
 
     public String getPCID(String pathFilenameExtension) {
         License license = this.openLicenseFile(pathFilenameExtension);
-        String pcID = license.getPcID();
+        String pcID = license != null ? license.getPcID() : null;
         this.closeLicenseFile(pathFilenameExtension);
         return pcID;
     }
@@ -96,7 +92,7 @@ public class LicenseManager {
             in.close();
             return license;
         } catch (Exception var5) {
-            Logger.getLogger(LicenseManager.class.getName()).log(Level.SEVERE, (String)null, var5);
+            Logger.getLogger(LicenseManager.class.getName()).log(Level.SEVERE, null, var5);
             return null;
         }
     }
@@ -105,7 +101,7 @@ public class LicenseManager {
         try {
             CryptographyHandler.encrypt(pathFilenameExtension);
         } catch (IOException var3) {
-            Logger.getLogger(LicenseManager.class.getName()).log(Level.SEVERE, (String)null, var3);
+            Logger.getLogger(LicenseManager.class.getName()).log(Level.SEVERE, null, var3);
         }
 
     }
@@ -116,7 +112,7 @@ public class LicenseManager {
             out.writeObject(license);
             out.close();
         } catch (IOException var4) {
-            Logger.getLogger(LicenseManager.class.getName()).log(Level.SEVERE, (String)null, var4);
+            Logger.getLogger(LicenseManager.class.getName()).log(Level.SEVERE, null, var4);
         }
 
     }

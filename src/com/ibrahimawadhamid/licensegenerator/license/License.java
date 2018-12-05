@@ -1,11 +1,12 @@
 package com.ibrahimawadhamid.licensegenerator.license;
 
 import com.ibrahimawadhamid.licensegenerator.handler.IDGenerator;
+
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class License implements Serializable {
+class License implements Serializable {
     private int numberOfRuns;
     private String motherboardID;
     private String harddiskID;
@@ -18,7 +19,7 @@ public class License implements Serializable {
             this.harddiskID = IDGenerator.getSerialNumber("C");
             this.pcID = this.motherboardID + this.harddiskID;
         } catch (Exception var3) {
-            Logger.getLogger(License.class.getName()).log(Level.SEVERE, (String)null, var3);
+            Logger.getLogger(License.class.getName()).log(Level.SEVERE, null, var3);
         }
 
     }

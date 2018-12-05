@@ -2,9 +2,7 @@ package com.ibrahimawadhamid.licensegenerator.handler;
 
 import java.util.Random;
 
-public class PRG {
-    public PRG() {
-    }
+class PRG {
 
     public static byte[] Generate(byte seed, int key_length) {
         Random random_generator = new Random((long)seed);

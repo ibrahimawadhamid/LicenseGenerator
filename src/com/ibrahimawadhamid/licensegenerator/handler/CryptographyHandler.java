@@ -1,17 +1,11 @@
 package com.ibrahimawadhamid.licensegenerator.handler;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CryptographyHandler {
-    public CryptographyHandler() {
-    }
 
     public static void encrypt(String path_filename_extension) throws IOException {
         try {
@@ -35,7 +29,7 @@ public class CryptographyHandler {
             fin.close();
             fos.close();
         } catch (FileNotFoundException var9) {
-            Logger.getLogger(CryptographyHandler.class.getName()).log(Level.SEVERE, (String)null, var9);
+            Logger.getLogger(CryptographyHandler.class.getName()).log(Level.SEVERE, null, var9);
         }
 
     }
@@ -61,7 +55,7 @@ public class CryptographyHandler {
             fin.close();
             fos.close();
         } catch (FileNotFoundException var9) {
-            Logger.getLogger(CryptographyHandler.class.getName()).log(Level.SEVERE, (String)null, var9);
+            Logger.getLogger(CryptographyHandler.class.getName()).log(Level.SEVERE, null, var9);
         }
 
     }
